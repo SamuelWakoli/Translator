@@ -27,19 +27,15 @@ detection and translation.
 <img src="screenshots/language_detection.png"
 width="300" height="600" alt="Screenshot showing the Translator app with English text auto-detected"
 title="Language Detection Screen">
-
 <img src="screenshots/model_download.png"
 width="300" height="600" alt="Screenshot illustrating the app downloading the ML model for Afrikaans
 translation" title="Model Download Screen">
-
 <img src="screenshots/translation_afrikaans.png"
 width="300" height="600" alt="Screenshot of translated text in Afrikaans" title="Translated Text in
 Afrikaans">
-
 <img src="screenshots/translation_chinese.png"
 width="300" height="600" alt="Screenshot of translated text in Chinese" title="Translated Text in
 Chinese">
-
 <img src="screenshots/language_selection.png"
 width="300" height="600" alt="Screenshot of the target language selection menu with 59 languages"
 title="Language Selection Menu">

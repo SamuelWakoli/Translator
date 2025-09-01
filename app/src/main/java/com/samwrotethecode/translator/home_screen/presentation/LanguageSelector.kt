@@ -1,7 +1,6 @@
 package com.samwrotethecode.translator.home_screen.presentation
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.mlkit.nl.translate.TranslateLanguage
+import com.samwrotethecode.translator.core.utils.getLanguageNameFromBcp47
 
 // Use this to show all supported languages
 val languagesBcp47: List<String?> = TranslateLanguage.getAllLanguages()
@@ -41,7 +41,7 @@ fun InputLanguageSelector(
         shape = MaterialTheme.shapes.medium,
         onClick = {
             showModeSelector = true
-        }
+        },
     ) {
         ListItem(
             overlineContent = {
@@ -53,7 +53,7 @@ fun InputLanguageSelector(
                         Text("Auto Detect")
                         if (uiState.sourceLanguage != null) Text(
                             "${
-                                TranslateLanguage.fromLanguageTag(
+                                getLanguageNameFromBcp47(
                                     uiState.sourceLanguage
                                 )
                             } (Detected)"
@@ -63,37 +63,32 @@ fun InputLanguageSelector(
                     Column {
                         Text("Select Language")
                         if (uiState.sourceLanguage != null) Text(
-                            "${
-                                TranslateLanguage.fromLanguageTag(
-                                    uiState.sourceLanguage
-                                )
-                            }"
+                            getLanguageNameFromBcp47(
+                                uiState.sourceLanguage
+                            )
                         )
                     }
                 }
             },
         )
 
-    }
-
-    if (showModeSelector) {
-        DropdownMenu(expanded = showModeSelector, onDismissRequest = { showModeSelector = false }) {
-            DropdownMenuItem(
-                text = { Text("Auto Detect") },
-                onClick = {
+        if (showModeSelector) {
+            DropdownMenu(
+                expanded = true, onDismissRequest = { showModeSelector = false }) {
+                DropdownMenuItem(text = { Text("Auto Detect") }, onClick = {
                     viewModel.toggleAutoDetectLanguageMode(true)
                     showModeSelector = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text("Select Language") },
-                onClick = {
+                })
+                DropdownMenuItem(text = { Text("Select Language") }, onClick = {
                     viewModel.toggleAutoDetectLanguageMode(false)
+                    showLanguageSelector = true
                     showModeSelector = false
-                }
-            )
+                })
+            }
         }
     }
+
+
 
     if (showLanguageSelector) {
         LanguageSelectorDialog(
@@ -118,7 +113,7 @@ fun OutputLanguageSelector(
         shape = MaterialTheme.shapes.medium,
         onClick = {
             showLanguageSelector = true
-        }
+        },
     ) {
         ListItem(
             overlineContent = {
@@ -126,11 +121,9 @@ fun OutputLanguageSelector(
             },
             headlineContent = {
                 if (uiState.targetLanguage != null) Text(
-                    "${
-                        TranslateLanguage.fromLanguageTag(
-                            uiState.targetLanguage
-                        )
-                    }"
+                    getLanguageNameFromBcp47(
+                        uiState.targetLanguage
+                    )
                 )
             },
         )
@@ -150,8 +143,7 @@ fun OutputLanguageSelector(
 
 @Composable
 fun LanguageSelectorDialog(
-    onDismissRequest: () -> Unit,
-    onSelectLanguage: (String) -> Unit
+    onDismissRequest: () -> Unit, onSelectLanguage: (String) -> Unit
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -161,7 +153,7 @@ fun LanguageSelectorDialog(
                 items(languagesBcp47) {
                     ListItem(
                         headlineContent = {
-                            Text(it!!)
+                            Text(getLanguageNameFromBcp47(it!!).toString())
                         },
                         Modifier
                             .padding(8.dp)

@@ -16,7 +16,7 @@ fun NavigationHost() {
         startDestination = AppScreens.HomeScreen.route,
     ) {
         composable(AppScreens.HomeScreen.route) {
-            HomeScreen(navController = navController)
+            HomeScreen()
         }
     }
 }

@@ -2,13 +2,10 @@ package com.samwrotethecode.translator.home_screen.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -25,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,30 +32,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.samwrotethecode.translator.R
-import com.samwrotethecode.translator.core.presentation.MultiScreenPreview
-import com.samwrotethecode.translator.core.theme.TranslatorTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun HomeScreen(
-    navController: NavHostController,
-) {
+fun HomeScreen() {
     Scaffold(
-        topBar = { HomeScreenAppBar(navController) }) { innerPadding ->
+        topBar = { HomeScreenAppBar() }) { innerPadding ->
         HomeScreenBody(modifier = Modifier.padding(innerPadding))
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenAppBar(navController: NavHostController) {
+fun HomeScreenAppBar() {
     TopAppBar(
         navigationIcon = {
             Image(
@@ -119,13 +109,6 @@ fun HomeScreenBody(
             Spacer(Modifier.size(8.0.dp))
             OutputLanguageSelector(modifier = Modifier.padding(8.dp))
             Spacer(Modifier.size(8.dp))
-            if (uiState.translatedText == null) {
-                Text(
-                    "Translated text will appear here",
-                    Modifier.padding(8.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-            }
             uiState.translatedText?.let {
                 Card(
                     modifier = Modifier
@@ -156,16 +139,6 @@ fun HomeScreenBody(
                         uiState.error,
                         Modifier.padding(8.dp),
                         color = MaterialTheme.colorScheme.error,
-                    )
-                }
-                if (uiState.modelDownloadProgress > 0f) {
-                    Text(
-                        text = "Model download progress: ${
-                            String.format(
-                                "%.2f",
-                                uiState.modelDownloadProgress
-                            )
-                        }%"
                     )
                 }
             }

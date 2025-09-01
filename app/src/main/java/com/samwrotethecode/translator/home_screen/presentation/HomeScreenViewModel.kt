@@ -87,6 +87,20 @@ class HomeScreenViewModel @Inject constructor(
             text = text,
             sourceLanguage = uiState.value.sourceLanguage!!,
             targetLanguage = uiState.value.targetLanguage!!,
+            onDownloadModel = {
+                _uiState.value = _uiState.value.copy(
+                    isDownloadingModel = true,
+                    isTranslating = false,
+                    error = null,
+                )
+            },
+            onCompleteModelDownload = {
+                _uiState.value = _uiState.value.copy(
+                    isDownloadingModel = false,
+                    isTranslating = true,
+                    error = null,
+                )
+            },
             onSuccess = { translatedText ->
                 _uiState.value = _uiState.value.copy(
                     translatedText = translatedText,
@@ -98,6 +112,7 @@ class HomeScreenViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(
                     error = error,
                     isTranslating = false,
+                    isDownloadingModel = false,
                     translatedText = null,
                 )
             }

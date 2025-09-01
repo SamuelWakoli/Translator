@@ -5,6 +5,8 @@ interface LanguageTranslator {
         text: String,
         sourceLanguage: String,
         targetLanguage: String,
+        onDownloadModel: () -> Unit,
+        onCompleteModelDownload: () -> Unit,
         onSuccess: (String?) -> Unit,
         onError: (String) -> Unit,
     )

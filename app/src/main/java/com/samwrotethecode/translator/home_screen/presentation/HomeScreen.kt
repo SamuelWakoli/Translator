@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -29,7 +30,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.samwrotethecode.translator.R
 import com.samwrotethecode.translator.core.presentation.MultiScreenPreview
 import com.samwrotethecode.translator.core.theme.TranslatorTheme
@@ -38,13 +38,10 @@ import com.samwrotethecode.translator.core.theme.TranslatorTheme
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsState().value
-
     Scaffold(
         topBar = { HomeScreenAppBar(navController) }) { innerPadding ->
-        HomeScreenBody(modifier = Modifier.padding(innerPadding), state = uiState)
+        HomeScreenBody(modifier = Modifier.padding(innerPadding))
     }
 }
 
@@ -68,7 +65,11 @@ fun HomeScreenAppBar(navController: NavHostController) {
 }
 
 @Composable
-fun HomeScreenBody(modifier: Modifier = Modifier, state: HomeScreenState) {
+fun HomeScreenBody(
+    modifier: Modifier = Modifier,
+    viewModel: HomeScreenViewModel = hiltViewModel()
+) {
+    val uiState = viewModel.uiState.collectAsState().value
     var inputText by remember { mutableStateOf("") }
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
@@ -77,6 +78,8 @@ fun HomeScreenBody(modifier: Modifier = Modifier, state: HomeScreenState) {
                 .widthIn(max = 600.dp)
                 .padding(8.dp)
         ) {
+            InputLanguageSelector()
+            Spacer(Modifier.size(8.dp))
             OutlinedTextField(
                 value = inputText,
                 onValueChange = { inputText = it },
@@ -90,35 +93,44 @@ fun HomeScreenBody(modifier: Modifier = Modifier, state: HomeScreenState) {
                 shape = MaterialTheme.shapes.large,
             )
             Spacer(Modifier.size(8.0.dp))
-            if (state.translatedText == null) {
+            OutputLanguageSelector()
+            Spacer(Modifier.size(8.dp))
+            if (uiState.translatedText == null) {
                 Text("Translated text will appear here")
                 Spacer(Modifier.size(8.0.dp))
             }
-            state.translatedText?.let {
+            uiState.translatedText?.let {
                 Text(it)
                 Spacer(Modifier.size(8.0.dp))
             }
-            if (state.isTranslating) {
+            if (uiState.isTranslating) {
                 Text("Translating...")
             }
-            if (state.isDetectingLanguage) {
+            if (uiState.isDetectingLanguage) {
                 Text("Detecting language...")
             }
-            if (state.isDownloadingModel) {
+            if (uiState.isDownloadingModel) {
                 Text("Downloading model...")
             }
-            if (state.error != null) {
-                Text(state.error)
+            if (uiState.error != null) {
+                Text(uiState.error)
             }
-            if (state.modelDownloadProgress > 0f) {
+            if (uiState.modelDownloadProgress > 0f) {
                 Text(
                     text = "Model download progress: ${
                         String.format(
                             "%.2f",
-                            state.modelDownloadProgress
+                            uiState.modelDownloadProgress
                         )
                     }%"
                 )
+            }
+            if (uiState.sourceLanguage != null && uiState.targetLanguage != null && inputText.isNotEmpty()) {
+                ElevatedButton(onClick = {
+                    viewModel.translateText(inputText)
+                }) {
+                    Text("Translate")
+                }
             }
         }
     }
@@ -129,8 +141,6 @@ fun HomeScreenBody(modifier: Modifier = Modifier, state: HomeScreenState) {
 @Composable
 fun HomeScreenBodyPreview() {
     TranslatorTheme {
-        HomeScreenBody(
-            state = HomeScreenState()
-        )
+        HomeScreenBody()
     }
 }

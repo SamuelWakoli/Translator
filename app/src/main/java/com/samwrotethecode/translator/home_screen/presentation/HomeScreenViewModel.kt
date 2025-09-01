@@ -41,17 +41,24 @@ class HomeScreenViewModel @Inject constructor(
         )
     }
 
-    fun selectLanguage(languageCode: String) {
+    fun toggleAutoDetectLanguageMode(value: Boolean) {
         _uiState.value = _uiState.value.copy(
-            targetLanguage = languageCode,
+            autoDetectLanguage = value,
+            targetLanguage = null,
+        )
+    }
+
+    fun selectSourceLanguage(languageCode: String) {
+        _uiState.value = _uiState.value.copy(
+            sourceLanguage = languageCode,
             autoDetectLanguage = false,
         )
     }
 
-    fun enableAutoDetectLanguage() {
+    fun selectTargetLanguage(languageCode: String) {
         _uiState.value = _uiState.value.copy(
-            autoDetectLanguage = true,
-            targetLanguage = null,
+            targetLanguage = languageCode,
+            autoDetectLanguage = false,
         )
     }
 

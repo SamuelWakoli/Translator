@@ -132,7 +132,7 @@ fun HomeScreenBody(
                     Text("Detecting language...")
                 }
                 if (uiState.isDownloadingModel) {
-                    Text("Downloading model...")
+                    Text("Downloading ML model...")
                 }
                 if (uiState.error != null) {
                     Text(
@@ -168,7 +168,6 @@ fun HomeScreenBody(
                                 color = MaterialTheme.colorScheme.primary,
                                 strokeWidth = 2.dp,
                             )
-
                     }
                 }
             }

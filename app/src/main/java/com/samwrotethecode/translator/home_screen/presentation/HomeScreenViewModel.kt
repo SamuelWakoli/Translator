@@ -13,8 +13,75 @@ class HomeScreenViewModel @Inject constructor(
     private val languageDetector: LanguageDetector,
     private val languageTranslator: LanguageTranslator
 ) : ViewModel() {
-    private val _state = MutableStateFlow<HomeScreenState>(HomeScreenState.Initial)
-    val state = _state.asStateFlow()
+    private val _uiState = MutableStateFlow(HomeScreenState())
+    val uiState = _uiState.asStateFlow()
 
+    fun detectLanguage(text: String) {
+        _uiState.value = _uiState.value.copy(
+            isDetectingLanguage = true,
+            sourceLanguage = null,
+            error = null,
+            translatedText = null,
+        )
+        languageDetector.detectLanguage(
+            text = text,
+            onSuccess = { languageCode ->
+                _uiState.value = _uiState.value.copy(
+                    sourceLanguage = languageCode,
+                    isDetectingLanguage = false,
+                )
+            },
+            onFailure = { error ->
+                _uiState.value = _uiState.value.copy(
+                    error = error,
+                    sourceLanguage = null,
+                    isDetectingLanguage = false,
+                )
+            }
+        )
+    }
+
+    fun translateText(text: String) {
+        if (uiState.value.sourceLanguage == null) {
+            _uiState.value = _uiState.value.copy(
+                error = "Source language not detected"
+            )
+            return
+        }
+
+        if (uiState.value.targetLanguage == null) {
+            _uiState.value = _uiState.value.copy(
+                error = "Target language not selected"
+            )
+            return
+        }
+
+        _uiState.value = _uiState.value.copy(
+            isTranslating = true,
+            translatedText = null,
+            error = null,
+        )
+
+        languageTranslator.translateText(
+            text = text,
+            sourceLanguage = uiState.value.sourceLanguage!!,
+            targetLanguage = uiState.value.targetLanguage!!,
+            onSuccess = { translatedText ->
+                _uiState.value = _uiState.value.copy(
+                    translatedText = translatedText,
+                    isTranslating = false,
+                    error = null,
+                )
+            },
+            onError = { error ->
+                _uiState.value = _uiState.value.copy(
+                    error = error,
+                    isTranslating = false,
+                    translatedText = null,
+                )
+            }
+        )
+
+    }
 
 }

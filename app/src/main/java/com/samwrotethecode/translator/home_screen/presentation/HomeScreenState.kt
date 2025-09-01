@@ -1,8 +1,12 @@
 package com.samwrotethecode.translator.home_screen.presentation
 
-sealed class HomeScreenState {
-    object Initial : HomeScreenState()
-    object Loading : HomeScreenState()
-    data class Success(val data: String) : HomeScreenState()
-    data class Error(val message: String) : HomeScreenState()
-}
+data class HomeScreenState(
+    val isDetectingLanguage: Boolean = false,
+    val sourceLanguage: String? = null,
+    val targetLanguage: String? = null,
+    val isDownloadingModel: Boolean = false,
+    val modelDownloadProgress: Float = 0f,
+    val isTranslating: Boolean = false,
+    val translatedText: String? = null,
+    val error: String? = null
+)

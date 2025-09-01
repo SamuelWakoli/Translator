@@ -1,4 +1,4 @@
-package com.samwrotethecode.translator.ui.theme
+package com.samwrotethecode.translator.core.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

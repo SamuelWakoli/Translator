@@ -1,4 +1,4 @@
-package com.samwrotethecode.translator.ui.theme
+package com.samwrotethecode.translator.core.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily

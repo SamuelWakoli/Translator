@@ -78,7 +78,7 @@ fun HomeScreenBody(
                 .widthIn(max = 600.dp)
                 .padding(8.dp)
         ) {
-            InputLanguageSelector()
+            InputLanguageSelector(modifier = Modifier.padding(8.dp))
             Spacer(Modifier.size(8.dp))
             OutlinedTextField(
                 value = inputText,
@@ -93,7 +93,7 @@ fun HomeScreenBody(
                 shape = MaterialTheme.shapes.large,
             )
             Spacer(Modifier.size(8.0.dp))
-            OutputLanguageSelector()
+            OutputLanguageSelector(modifier = Modifier.padding(8.dp))
             Spacer(Modifier.size(8.dp))
             if (uiState.translatedText == null) {
                 Text("Translated text will appear here")
@@ -133,14 +133,5 @@ fun HomeScreenBody(
                 }
             }
         }
-    }
-}
-
-
-@MultiScreenPreview
-@Composable
-fun HomeScreenBodyPreview() {
-    TranslatorTheme {
-        HomeScreenBody()
     }
 }

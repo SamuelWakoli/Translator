@@ -2,7 +2,9 @@ package com.samwrotethecode.translator.home_screen.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
@@ -10,6 +12,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -21,16 +24,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.mlkit.nl.translate.TranslateLanguage
 import com.samwrotethecode.translator.core.utils.getLanguageNameFromBcp47
-
-// Use this to show all supported languages
-val languagesBcp47: List<String?> = TranslateLanguage.getAllLanguages()
+import com.samwrotethecode.translator.core.utils.languagesBcp47
 
 @Composable
 fun InputLanguageSelector(
+    modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState().value
@@ -38,14 +40,20 @@ fun InputLanguageSelector(
     var showLanguageSelector by remember { mutableStateOf(false) }
 
     Card(
-        shape = MaterialTheme.shapes.medium,
+        modifier = modifier,
         onClick = {
             showModeSelector = true
         },
+        shape = MaterialTheme.shapes.medium,
     ) {
         ListItem(
+            colors = ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                headlineColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                overlineColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
             overlineContent = {
-                Text("Source Language")
+                Text("Source Language", fontWeight = FontWeight.Bold)
             },
             headlineContent = {
                 if (uiState.autoDetectLanguage) {
@@ -104,20 +112,27 @@ fun InputLanguageSelector(
 
 @Composable
 fun OutputLanguageSelector(
+    modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     var showLanguageSelector by remember { mutableStateOf(false) }
 
     Card(
+        modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         onClick = {
             showLanguageSelector = true
         },
     ) {
         ListItem(
+            colors = ListItemDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                headlineColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                overlineColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
             overlineContent = {
-                Text("Target Language")
+                Text("Target Language", fontWeight = FontWeight.Bold)
             },
             headlineContent = {
                 if (uiState.targetLanguage != null) Text(
@@ -147,22 +162,34 @@ fun LanguageSelectorDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismissRequest,
-        title = { Text("Select Language") },
+        title = { Text("Select Language", color = MaterialTheme.colorScheme.primary) },
         text = {
-            LazyColumn {
-                items(languagesBcp47) {
-                    ListItem(
-                        headlineContent = {
-                            Text(getLanguageNameFromBcp47(it!!).toString())
-                        },
-                        Modifier
-                            .padding(8.dp)
-                            .clip(MaterialTheme.shapes.medium)
-                            .clickable {
-                                onSelectLanguage(it!!)
-                                onDismissRequest()
+            Column {
+                Text(
+                    "${languagesBcp47.size} languages",
+                    color = MaterialTheme.colorScheme.secondary,
+                )
+                Spacer(Modifier.size(8.dp))
+                LazyColumn {
+                    items(languagesBcp47) {
+                        ListItem(
+                            headlineContent = {
+                                Text(getLanguageNameFromBcp47(it))
                             },
-                    )
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .clip(MaterialTheme.shapes.medium)
+                                .clickable {
+                                    onSelectLanguage(it)
+                                    onDismissRequest()
+                                },
+                            colors = ListItemDefaults.colors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                                headlineColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                                overlineColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            ),
+                        )
+                    }
                 }
             }
         },

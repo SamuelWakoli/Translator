@@ -2,7 +2,6 @@ package com.samwrotethecode.translator.home_screen.data.service
 
 import android.util.Log
 import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import com.samwrotethecode.translator.home_screen.domain.service.LanguageTranslator

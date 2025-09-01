@@ -1,14 +1,22 @@
 package com.samwrotethecode.translator.home_screen.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,14 +25,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,8 +45,8 @@ import androidx.navigation.NavHostController
 import com.samwrotethecode.translator.R
 import com.samwrotethecode.translator.core.presentation.MultiScreenPreview
 import com.samwrotethecode.translator.core.theme.TranslatorTheme
+import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
@@ -55,12 +67,14 @@ fun HomeScreenAppBar(navController: NavHostController) {
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary)
             )
-        }, title = {
+        },
+        title = {
             Text("Translator", fontWeight = FontWeight.Bold)
-        }, colors = TopAppBarDefaults.topAppBarColors(
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
             titleContentColor = MaterialTheme.colorScheme.primary,
             navigationIconContentColor = MaterialTheme.colorScheme.primary,
-        )
+        ),
     )
 }
 
@@ -78,8 +92,8 @@ fun HomeScreenBody(
                 .widthIn(max = 600.dp)
                 .padding(8.dp)
         ) {
+            GoogleAttribution(modifier = Modifier.padding(16.dp))
             InputLanguageSelector(modifier = Modifier.padding(8.dp))
-            Spacer(Modifier.size(8.dp))
             OutlinedTextField(
                 value = inputText,
                 onValueChange = { inputText = it },
@@ -88,48 +102,101 @@ fun HomeScreenBody(
                     .padding(8.dp),
                 label = { Text("Enter text to translate") },
                 singleLine = false,
-                maxLines = 5,
+                minLines = 5,
+                maxLines = 8,
                 textStyle = MaterialTheme.typography.bodyLarge,
                 shape = MaterialTheme.shapes.large,
             )
+            LaunchedEffect(inputText) {
+                if (inputText.isNotBlank() && uiState.autoDetectLanguage) {
+                    // Debounce for 1 second before detecting language
+                    delay(1000L)
+                    if (inputText.isNotBlank()) { // Re-check after delay
+                        viewModel.detectLanguage(inputText)
+                    }
+                }
+            }
             Spacer(Modifier.size(8.0.dp))
             OutputLanguageSelector(modifier = Modifier.padding(8.dp))
             Spacer(Modifier.size(8.dp))
             if (uiState.translatedText == null) {
-                Text("Translated text will appear here")
-                Spacer(Modifier.size(8.0.dp))
-            }
-            uiState.translatedText?.let {
-                Text(it)
-                Spacer(Modifier.size(8.0.dp))
-            }
-            if (uiState.isTranslating) {
-                Text("Translating...")
-            }
-            if (uiState.isDetectingLanguage) {
-                Text("Detecting language...")
-            }
-            if (uiState.isDownloadingModel) {
-                Text("Downloading model...")
-            }
-            if (uiState.error != null) {
-                Text(uiState.error)
-            }
-            if (uiState.modelDownloadProgress > 0f) {
                 Text(
-                    text = "Model download progress: ${
-                        String.format(
-                            "%.2f",
-                            uiState.modelDownloadProgress
-                        )
-                    }%"
+                    "Translated text will appear here",
+                    Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.bodyLarge,
                 )
             }
-            if (uiState.sourceLanguage != null && uiState.targetLanguage != null && inputText.isNotEmpty()) {
-                ElevatedButton(onClick = {
-                    viewModel.translateText(inputText)
-                }) {
-                    Text("Translate")
+            uiState.translatedText?.let {
+                Card(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                ) {
+                    Text(
+                        it,
+                        Modifier.padding(16.dp),
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
+            Column(modifier = Modifier.padding(8.dp)) {
+                if (uiState.isDetectingLanguage) {
+                    Text("Detecting language...")
+                }
+                if (uiState.isDownloadingModel) {
+                    Text("Downloading model...")
+                }
+                if (uiState.error != null) {
+                    Text(
+                        uiState.error,
+                        Modifier.padding(8.dp),
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+                if (uiState.modelDownloadProgress > 0f) {
+                    Text(
+                        text = "Model download progress: ${
+                            String.format(
+                                "%.2f",
+                                uiState.modelDownloadProgress
+                            )
+                        }%"
+                    )
+                }
+            }
+
+            if (uiState.sourceLanguage != null && uiState.targetLanguage != null && inputText.isNotBlank()) {
+                ElevatedButton(
+                    onClick = {
+                        viewModel.translateText(inputText)
+                    }, modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+                    ) {
+                        Text(
+                            "Translate",
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        if (uiState.isTranslating)
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .padding(start = 8.dp)
+                                    .size(24.dp),
+                                color = MaterialTheme.colorScheme.primary,
+                                strokeWidth = 2.dp,
+                            )
+
+                    }
                 }
             }
         }

@@ -117,7 +117,12 @@ class HomeScreenViewModel @Inject constructor(
                 )
             }
         )
+    }
 
+    fun clearTranslatedText() {
+        _uiState.value = _uiState.value.copy(
+            translatedText = null,
+        )
     }
 
 }

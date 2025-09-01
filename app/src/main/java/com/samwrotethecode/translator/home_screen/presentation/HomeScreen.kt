@@ -27,7 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,7 +74,7 @@ fun HomeScreenBody(
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState().value
-    var inputText by remember { mutableStateOf("") }
+    var inputText by rememberSaveable { mutableStateOf("") }
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Column(
@@ -144,33 +144,55 @@ fun HomeScreenBody(
             }
 
             if (uiState.sourceLanguage != null && uiState.targetLanguage != null && inputText.isNotBlank()) {
-                ElevatedButton(
-                    onClick = {
-                        viewModel.translateText(inputText)
-                    }, modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.CenterHorizontally)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
+                    ElevatedButton(
+                        onClick = {
+                            viewModel.translateText(inputText)
+                        }
                     ) {
-                        Text(
-                            "Translate",
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        if (uiState.isTranslating)
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .padding(start = 8.dp)
-                                    .size(24.dp),
-                                color = MaterialTheme.colorScheme.primary,
-                                strokeWidth = 2.dp,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                        ) {
+                            Text(
+                                "Translate",
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.titleMedium,
                             )
+                            if (uiState.isTranslating)
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .size(24.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    strokeWidth = 2.dp,
+                                )
+                        }
+                    }
+                    if (uiState.translatedText != null) {
+                        Spacer(Modifier.size(16.dp))
+                        ElevatedButton(
+                            onClick = {
+                                inputText = ""
+                                viewModel.clearTranslatedText()
+                            }
+                        ) {
+                            Text(
+                                "Clear",
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.titleMedium,
+                            )
+                        }
                     }
                 }
             }
+
         }
     }
 }

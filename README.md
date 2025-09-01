@@ -1,4 +1,4 @@
-<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" width="100" alt="Logo"/>
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" width="192" alt="Logo"/>
 
 # Translator
 

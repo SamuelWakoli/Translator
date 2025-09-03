@@ -139,7 +139,7 @@ fun HomeScreenBody(
                         )
                     }
                     Spacer(Modifier.size(8.dp))
-                    FilledIconButton(onClick = viewModel::clearTranslatedText) {
+                    FilledIconButton(onClick = { viewModel.clearTranslatedText() }) {
                         Icon(Icons.Default.Clear, contentDescription = "Clear")
                     }
                 }
@@ -164,7 +164,7 @@ fun HomeScreenBody(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {

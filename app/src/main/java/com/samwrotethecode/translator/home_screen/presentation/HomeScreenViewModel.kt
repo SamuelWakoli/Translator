@@ -59,6 +59,7 @@ class HomeScreenViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             targetLanguage = languageCode,
             autoDetectLanguage = false,
+            translatedText = null,
         )
     }
 

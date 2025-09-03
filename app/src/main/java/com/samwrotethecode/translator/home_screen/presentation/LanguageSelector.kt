@@ -113,6 +113,7 @@ fun InputLanguageSelector(
 
     if (showLanguageSelector) {
         LanguageSelectorDialog(
+            isSourceLanguage = true,
             onDismissRequest = {
                 showLanguageSelector = false
             },
@@ -157,6 +158,7 @@ fun OutputLanguageSelector(
 
     if (showLanguageSelector) {
         LanguageSelectorDialog(
+            isSourceLanguage = false,
             onDismissRequest = {
                 showLanguageSelector = false
             },
@@ -169,7 +171,7 @@ fun OutputLanguageSelector(
 
 @Composable
 fun LanguageSelectorDialog(
-    isSourceLanguage: Boolean = false,
+    isSourceLanguage: Boolean,
     onDismissRequest: () -> Unit,
     onSelectLanguage: (String) -> Unit
 ) {

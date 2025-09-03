@@ -73,7 +73,11 @@ fun InputLanguageSelector(
             IconButton(onClick = {
                 showModeSelector = true
             }) {
-                Icon(Icons.Default.MoreVert, contentDescription = null)
+                Icon(
+                    Icons.Default.MoreVert,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
             }
             DropdownMenu(
                 offset = DpOffset(8.dp, 4.dp),

@@ -2,8 +2,6 @@ package com.samwrotethecode.translator.home_screen.data.service
 
 import android.util.Log
 import com.google.mlkit.common.model.DownloadConditions
-import com.google.mlkit.common.model.RemoteModelManager
-import com.google.mlkit.nl.translate.TranslateRemoteModel
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import com.samwrotethecode.translator.home_screen.domain.service.LanguageTranslator
@@ -23,39 +21,18 @@ class LanguageTranslatorImpl : LanguageTranslator {
         val options = TranslatorOptions.Builder().setSourceLanguage(sourceLanguage)
             .setTargetLanguage(targetLanguage).build()
 
-        val translator = Translation.getClient(options)
-
         val conditions = DownloadConditions.Builder().requireWifi().build()
-
-        val modelManager = RemoteModelManager.getInstance()
-
-        modelManager.getDownloadedModels(TranslateRemoteModel::class.java).addOnSuccessListener {
-            if (it.contains(TranslateRemoteModel.Builder(targetLanguage).build())) {
-                translator.translate(text).addOnSuccessListener { result: String? ->
-                    onSuccess(result)
-                }
-            } else {
-                onDownloadModel()
-                modelManager.download(
-                    TranslateRemoteModel.Builder(targetLanguage).build(), conditions
-                ).addOnSuccessListener {
-                    onCompleteModelDownload()
-                    Log.d(tag, "Model downloaded successfully")
-                    translator.translate(text).addOnSuccessListener { result: String? ->
-                        onSuccess(result)
-                    }.addOnFailureListener { exception ->
-                        Log.e(tag, "Error translating text", exception)
-                        onError("An error occurred during translation: ${exception.message}")
-                    }
-                }.addOnFailureListener { exception ->
-                    Log.e(tag, "Error downloading model", exception)
-                    onError("An error occurred on ML model download: ${exception.message}")
-                }
-
+        val translator = Translation.getClient(options)
+        translator.downloadModelIfNeeded(conditions).addOnSuccessListener {
+            translator.translate(text).addOnSuccessListener {
+                onSuccess(it)
+            }.addOnFailureListener { exception ->
+                Log.e(tag, "Error translating text", exception)
+                onError("An error occurred during translation: ${exception.message}")
             }
-        }.addOnFailureListener { exception ->
-            Log.e(tag, "Error getting downloaded models", exception)
-            onError("An error occurred on getting download ML models: ${exception.message}")
+        }.addOnFailureListener {
+            Log.e(tag, "Error downloading model", it)
+            onError("An error occurred on ML model download: ${it.message}")
         }
     }
 }

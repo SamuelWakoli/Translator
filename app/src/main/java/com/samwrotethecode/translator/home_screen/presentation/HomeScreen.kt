@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -70,8 +74,7 @@ fun HomeScreenAppBar() {
 
 @Composable
 fun HomeScreenBody(
-    modifier: Modifier = Modifier,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    modifier: Modifier = Modifier, viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     var inputText by rememberSaveable { mutableStateOf("") }
@@ -82,7 +85,11 @@ fun HomeScreenBody(
                 .widthIn(max = 600.dp)
                 .padding(8.dp)
         ) {
-            GoogleAttribution(modifier = Modifier.padding(16.dp))
+            MLKitAttribution(
+                modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .padding(horizontal = 16.dp)
+            )
             InputLanguageSelector(modifier = Modifier.padding(8.dp))
             OutlinedTextField(
                 value = inputText,
@@ -92,7 +99,7 @@ fun HomeScreenBody(
                     .padding(8.dp),
                 label = { Text("Enter text to translate") },
                 singleLine = false,
-                minLines = 5,
+                minLines = 4,
                 maxLines = 8,
                 textStyle = MaterialTheme.typography.bodyLarge,
                 shape = MaterialTheme.shapes.large,
@@ -110,21 +117,31 @@ fun HomeScreenBody(
             OutputLanguageSelector(modifier = Modifier.padding(8.dp))
             Spacer(Modifier.size(8.dp))
             uiState.translatedText?.let {
-                Card(
+                Row(
                     modifier = Modifier
                         .padding(8.dp)
-                        .fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                    )
+                        .fillMaxWidth()
                 ) {
-                    Text(
-                        it,
-                        Modifier.padding(16.dp),
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
+                    Card(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .weight(1f),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                        )
+                    ) {
+                        Text(
+                            it,
+                            Modifier.padding(16.dp),
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
+                    Spacer(Modifier.size(8.dp))
+                    FilledIconButton(onClick = viewModel::clearTranslatedText) {
+                        Icon(Icons.Default.Clear, contentDescription = "Clear")
+                    }
                 }
             }
             Column(modifier = Modifier.padding(8.dp)) {
@@ -147,15 +164,14 @@ fun HomeScreenBody(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     ElevatedButton(
                         onClick = {
                             viewModel.translateText(inputText)
-                        }
-                    ) {
+                        }) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center,
@@ -165,34 +181,17 @@ fun HomeScreenBody(
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.titleMedium,
                             )
-                            if (uiState.isTranslating)
-                                CircularProgressIndicator(
-                                    modifier = Modifier
-                                        .padding(start = 8.dp)
-                                        .size(24.dp),
-                                    color = MaterialTheme.colorScheme.primary,
-                                    strokeWidth = 2.dp,
-                                )
-                        }
-                    }
-                    if (uiState.translatedText != null) {
-                        Spacer(Modifier.size(16.dp))
-                        ElevatedButton(
-                            onClick = {
-                                inputText = ""
-                                viewModel.clearTranslatedText()
-                            }
-                        ) {
-                            Text(
-                                "Clear",
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.titleMedium,
+                            if (uiState.isTranslating) CircularProgressIndicator(
+                                modifier = Modifier
+                                    .padding(start = 8.dp)
+                                    .size(24.dp),
+                                color = MaterialTheme.colorScheme.primary,
+                                strokeWidth = 2.dp,
                             )
                         }
                     }
                 }
             }
-
         }
     }
 }

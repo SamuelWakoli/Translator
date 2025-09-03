@@ -5,19 +5,18 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.samwrotethecode.translator.R
 
 @Composable
-fun GoogleAttribution(modifier: Modifier = Modifier) {
+fun MLKitAttribution(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier.then(
             Modifier
@@ -27,18 +26,12 @@ fun GoogleAttribution(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        Text("Powered by ")
-        Image(
-            painterResource(R.drawable.google_logo_transparent),
-            contentDescription = "Google logo",
-            contentScale = ContentScale.Fit,
-        )
-        VerticalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+        Text("Powered by ", fontWeight = FontWeight.SemiBold)
         Image(
             painterResource(R.drawable.ml),
             contentDescription = "ML Kit logo",
             contentScale = ContentScale.Fit,
         )
-        Text(" ML Kit")
+        Text(" ML Kit", fontWeight = FontWeight.SemiBold)
     }
 }

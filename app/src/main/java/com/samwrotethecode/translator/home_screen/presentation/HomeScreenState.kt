@@ -7,6 +7,7 @@ data class HomeScreenState(
     val targetLanguage: String? = null,
     val isDownloadingModel: Boolean = false,
     val isTranslating: Boolean = false,
+    val inputText: String = "",
     val translatedText: String? = null,
     val error: String? = null
 )

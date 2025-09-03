@@ -77,7 +77,6 @@ fun HomeScreenBody(
     modifier: Modifier = Modifier, viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState().value
-    var inputText by rememberSaveable { mutableStateOf("") }
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Column(
@@ -92,8 +91,8 @@ fun HomeScreenBody(
             )
             InputLanguageSelector(modifier = Modifier.padding(8.dp))
             OutlinedTextField(
-                value = inputText,
-                onValueChange = { inputText = it },
+                value = uiState.inputText,
+                onValueChange = { viewModel.updateInputText(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
@@ -104,12 +103,12 @@ fun HomeScreenBody(
                 textStyle = MaterialTheme.typography.bodyLarge,
                 shape = MaterialTheme.shapes.large,
             )
-            LaunchedEffect(inputText) {
-                if (inputText.isNotBlank() && uiState.autoDetectLanguage) {
+            LaunchedEffect(uiState.inputText) {
+                if (uiState.inputText.isNotBlank() && uiState.autoDetectLanguage) {
                     // Debounce for 1 second before detecting language
                     delay(1000L)
-                    if (inputText.isNotBlank()) { // Re-check after delay
-                        viewModel.detectLanguage(inputText)
+                    if (uiState.inputText.isNotBlank()) { // Re-check after delay
+                        viewModel.detectLanguage()
                     }
                 }
             }
@@ -160,7 +159,7 @@ fun HomeScreenBody(
                 }
             }
 
-            if (uiState.sourceLanguage != null && uiState.targetLanguage != null && inputText.isNotBlank()) {
+            if (uiState.sourceLanguage != null && uiState.targetLanguage != null && uiState.inputText.isNotBlank()) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -170,7 +169,7 @@ fun HomeScreenBody(
                 ) {
                     ElevatedButton(
                         onClick = {
-                            viewModel.translateText(inputText)
+                            viewModel.translateText()
                         }) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,

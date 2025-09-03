@@ -6,6 +6,7 @@ import com.samwrotethecode.translator.home_screen.domain.service.LanguageTransla
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,7 +17,7 @@ class HomeScreenViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeScreenState())
     val uiState = _uiState.asStateFlow()
 
-    fun detectLanguage(text: String) {
+    fun detectLanguage() {
         _uiState.value = _uiState.value.copy(
             isDetectingLanguage = true,
             sourceLanguage = null,
@@ -24,7 +25,7 @@ class HomeScreenViewModel @Inject constructor(
             translatedText = null,
         )
         languageDetector.detectLanguage(
-            text = text,
+            text = _uiState.value.inputText,
             onSuccess = { languageCode ->
                 _uiState.value = _uiState.value.copy(
                     sourceLanguage = languageCode,
@@ -44,26 +45,43 @@ class HomeScreenViewModel @Inject constructor(
     fun toggleAutoDetectLanguageMode(value: Boolean) {
         _uiState.value = _uiState.value.copy(
             autoDetectLanguage = value,
-            targetLanguage = null,
+            sourceLanguage = null,
+            translatedText = null,
+            error = null,
         )
+        if (value) {
+            detectLanguage()
+        }
     }
 
     fun selectSourceLanguage(languageCode: String) {
         _uiState.value = _uiState.value.copy(
             sourceLanguage = languageCode,
-            autoDetectLanguage = false,
         )
     }
 
     fun selectTargetLanguage(languageCode: String) {
         _uiState.value = _uiState.value.copy(
             targetLanguage = languageCode,
-            autoDetectLanguage = false,
             translatedText = null,
         )
     }
 
-    fun translateText(text: String) {
+    fun updateInputText(text: String) {
+        _uiState.value = _uiState.value.copy(
+            inputText = text,
+        )
+    }
+
+    fun translateText() {
+        val text = _uiState.value.inputText
+        if (text.isBlank()) {
+            _uiState.value = _uiState.value.copy(
+                error = "Please enter text to translate"
+            )
+            return
+        }
+
         if (uiState.value.sourceLanguage == null) {
             _uiState.value = _uiState.value.copy(
                 error = "Source language not detected"
@@ -125,5 +143,4 @@ class HomeScreenViewModel @Inject constructor(
             translatedText = null,
         )
     }
-
 }

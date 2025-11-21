@@ -15,5 +15,7 @@ class TranslationHistoryRepositoryImpl @Inject constructor(
 
     override suspend fun deleteHistoryItem(item: TranslationHistoryItem) = dao.delete(item)
 
+    override suspend fun updateHistoryItem(item: TranslationHistoryItem) = dao.update(item)
+
     override suspend fun clearHistory() = dao.clearAll()
 }

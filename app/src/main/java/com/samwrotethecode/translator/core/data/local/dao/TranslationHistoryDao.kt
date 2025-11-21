@@ -19,6 +19,9 @@ interface TranslationHistoryDao {
     @Delete
     suspend fun delete(item: TranslationHistoryItem)
 
+    @androidx.room.Update
+    suspend fun update(item: TranslationHistoryItem)
+
     @Query("DELETE FROM translation_history")
     suspend fun clearAll()
 }

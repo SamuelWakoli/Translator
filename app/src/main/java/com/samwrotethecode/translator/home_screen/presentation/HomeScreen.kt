@@ -13,6 +13,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.ContentPaste
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,7 +36,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -88,6 +92,7 @@ fun HomeScreenBody(
     modifier: Modifier = Modifier, viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.uiState.collectAsState().value
+    val clipboardManager = LocalClipboardManager.current
 
     Column(modifier = modifier.verticalScroll(rememberScrollState())) {
         Column(
@@ -100,20 +105,40 @@ fun HomeScreenBody(
                     .padding(bottom = 16.dp)
                     .padding(horizontal = 16.dp)
             )
-            InputLanguageSelector(modifier = Modifier.padding(8.dp))
+            
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                InputLanguageSelector(modifier = Modifier.weight(1f))
+                IconButton(onClick = {
+                    clipboardManager.getText()?.let {
+                        viewModel.updateInputText(it.text)
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ContentPaste,
+                        contentDescription = "Paste",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
             OutlinedTextField(
                 value = uiState.inputText,
                 onValueChange = { viewModel.updateInputText(it) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
-                label = { Text("Enter text to translate") },
+                    .padding(vertical = 8.dp),
+                placeholder = { Text("Enter text to translate") },
                 singleLine = false,
                 minLines = 4,
                 maxLines = 8,
                 textStyle = MaterialTheme.typography.bodyLarge,
                 shape = MaterialTheme.shapes.large,
             )
+            
             LaunchedEffect(uiState.inputText) {
                 if (uiState.inputText.isNotBlank() && uiState.autoDetectLanguage) {
                     // Debounce for 1 second before detecting language
@@ -123,9 +148,11 @@ fun HomeScreenBody(
                     }
                 }
             }
+            
             Spacer(Modifier.size(8.0.dp))
             OutputLanguageSelector(modifier = Modifier.padding(8.dp))
             Spacer(Modifier.size(8.dp))
+            
             uiState.translatedText?.let {
                 Row(
                     modifier = Modifier
@@ -141,12 +168,26 @@ fun HomeScreenBody(
                             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                         )
                     ) {
-                        Text(
-                            it,
-                            Modifier.padding(16.dp),
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
+                        Column {
+                            Text(
+                                it,
+                                Modifier.padding(16.dp),
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            IconButton(
+                                onClick = {
+                                    clipboardManager.setText(AnnotatedString(it))
+                                },
+                                modifier = Modifier.align(Alignment.End)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ContentCopy,
+                                    contentDescription = "Copy",
+                                    tint = MaterialTheme.colorScheme.onSecondaryContainer
+                                )
+                            }
+                        }
                     }
                     Spacer(Modifier.size(8.dp))
                     FilledIconButton(onClick = { viewModel.clearTranslatedText() }) {
@@ -154,6 +195,7 @@ fun HomeScreenBody(
                     }
                 }
             }
+            
             Column(modifier = Modifier.padding(8.dp)) {
                 if (uiState.isDetectingLanguage) {
                     Text("Detecting language...")

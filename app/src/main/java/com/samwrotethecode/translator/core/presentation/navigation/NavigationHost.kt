@@ -3,15 +3,20 @@ package com.samwrotethecode.translator.core.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.samwrotethecode.translator.history_screen.presentation.HistoryScreen
 import com.samwrotethecode.translator.home_screen.presentation.HomeScreen
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import com.samwrotethecode.translator.dictionary_screen.presentation.DictionaryScreen
+import com.samwrotethecode.translator.settings_screen.presentation.SettingsScreen
+
 @Composable
-fun NavigationHost() {
-
-    val navController = rememberNavController()
-
+fun NavigationHost(
+    navController: NavHostController,
+) {
     NavHost(
         navController = navController,
         startDestination = AppScreens.HomeScreen.route,
@@ -29,6 +34,12 @@ fun NavigationHost() {
                     navController.popBackStack()
                 }
             )
+        }
+        composable(AppScreens.DictionaryScreen.route) {
+            DictionaryScreen()
+        }
+        composable(AppScreens.SettingsScreen.route) {
+            SettingsScreen()
         }
     }
 }

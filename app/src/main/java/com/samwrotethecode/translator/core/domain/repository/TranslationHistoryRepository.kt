@@ -7,5 +7,6 @@ interface TranslationHistoryRepository {
     fun getHistory(): Flow<List<TranslationHistoryItem>>
     suspend fun addHistoryItem(item: TranslationHistoryItem)
     suspend fun deleteHistoryItem(item: TranslationHistoryItem)
+    suspend fun updateHistoryItem(item: TranslationHistoryItem)
     suspend fun clearHistory()
 }

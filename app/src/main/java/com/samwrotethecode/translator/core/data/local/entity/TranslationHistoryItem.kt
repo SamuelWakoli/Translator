@@ -10,5 +10,6 @@ data class TranslationHistoryItem(
     val translatedText: String,
     val sourceLanguageCode: String,
     val targetLanguageCode: String,
+    val isFavorite: Boolean = false,
     val timestamp: Long = System.currentTimeMillis()
 )

@@ -8,14 +8,20 @@ import com.samwrotethecode.translator.core.presentation.navigation.NavigationHos
 import com.samwrotethecode.translator.core.theme.TranslatorTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import com.samwrotethecode.translator.core.presentation.MainScreen
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TranslatorTheme {
-                NavigationHost()
+                val windowSizeClass = calculateWindowSizeClass(this)
+                MainScreen(windowSizeClass = windowSizeClass.widthSizeClass)
             }
         }
     }

@@ -1,18 +1,22 @@
 package com.samwrotethecode.translator.home_screen.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.samwrotethecode.translator.core.data.local.entity.TranslationHistoryItem
+import com.samwrotethecode.translator.core.domain.repository.TranslationHistoryRepository
 import com.samwrotethecode.translator.home_screen.domain.service.LanguageDetector
 import com.samwrotethecode.translator.home_screen.domain.service.LanguageTranslator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val languageDetector: LanguageDetector,
-    private val languageTranslator: LanguageTranslator
+    private val languageTranslator: LanguageTranslator,
+    private val translationHistoryRepository: TranslationHistoryRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeScreenState())
     val uiState = _uiState.asStateFlow()
@@ -126,6 +130,12 @@ class HomeScreenViewModel @Inject constructor(
                     isTranslating = false,
                     error = null,
                 )
+                saveTranslationToHistory(
+                    text,
+                    translatedText,
+                    uiState.value.sourceLanguage!!,
+                    uiState.value.targetLanguage!!
+                )
             },
             onError = { error ->
                 _uiState.value = _uiState.value.copy(
@@ -142,5 +152,23 @@ class HomeScreenViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(
             translatedText = null,
         )
+    }
+
+    private fun saveTranslationToHistory(
+        sourceText: String,
+        translatedText: String,
+        sourceLanguage: String,
+        targetLanguage: String
+    ) {
+        viewModelScope.launch {
+            translationHistoryRepository.addHistoryItem(
+                TranslationHistoryItem(
+                    sourceText = sourceText,
+                    translatedText = translatedText,
+                    sourceLanguageCode = sourceLanguage,
+                    targetLanguageCode = targetLanguage
+                )
+            )
+        }
     }
 }

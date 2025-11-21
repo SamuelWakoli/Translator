@@ -1,21 +1,22 @@
 [versions]
-agp = "8.12.2"
-kotlin = "2.2.10"
+agp = "8.13.1"
+kotlin = "2.2.21"
 coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.9.3"
-activityCompose = "1.10.1"
-composeBom = "2025.08.01"
-uiTextGoogleFonts = "1.9.0"
-navigationCompose = "2.9.3"
-viewModel = "2.9.3"
+lifecycleRuntimeKtx = "2.10.0"
+activityCompose = "1.12.0"
+composeBom = "2025.11.01"
+uiTextGoogleFonts = "1.9.5"
+navigationCompose = "2.9.6"
+viewModel = "2.10.0"
 mlKitLanguageId = "17.0.0"
 mlKitTranslate = "17.0.3"
-hilt = "2.57.1"
-ksp = "2.2.10-2.0.2"
-hiltNavigationCompose = "1.2.0"
+hilt = "2.57.2"
+ksp = "2.2.21-2.0.4"
+room = "2.8.4"
+hiltNavigationCompose = "1.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,6 +42,9 @@ google-mlkit-translate = { group = "com.google.mlkit", name = "translate", versi
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -5,8 +5,9 @@ import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import com.samwrotethecode.translator.home_screen.domain.service.LanguageTranslator
+import javax.inject.Inject
 
-class LanguageTranslatorImpl : LanguageTranslator {
+class LanguageTranslatorImpl @Inject constructor() : LanguageTranslator {
     private val tag = "LanguageTranslator"
 
     override fun translateText(
@@ -15,7 +16,7 @@ class LanguageTranslatorImpl : LanguageTranslator {
         targetLanguage: String,
         onDownloadModel: () -> Unit,
         onCompleteModelDownload: () -> Unit,
-        onSuccess: (String?) -> Unit,
+        onSuccess: (String) -> Unit,
         onError: (String) -> Unit
     ) {
         val options = TranslatorOptions.Builder().setSourceLanguage(sourceLanguage)

@@ -5,5 +5,5 @@ interface LanguageDetector {
         text: String,
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit,
-    )
+    ): Unit
 }

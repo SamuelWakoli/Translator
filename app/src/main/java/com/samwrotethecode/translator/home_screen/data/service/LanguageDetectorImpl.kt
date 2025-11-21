@@ -3,8 +3,9 @@ package com.samwrotethecode.translator.home_screen.data.service
 import android.util.Log
 import com.google.mlkit.nl.languageid.LanguageIdentification
 import com.samwrotethecode.translator.home_screen.domain.service.LanguageDetector
+import javax.inject.Inject
 
-class LanguageDetectorImpl : LanguageDetector {
+class LanguageDetectorImpl @Inject constructor() : LanguageDetector {
     val languageIdentifier = LanguageIdentification.getClient()
     private val tag = "LanguageDetector"
 

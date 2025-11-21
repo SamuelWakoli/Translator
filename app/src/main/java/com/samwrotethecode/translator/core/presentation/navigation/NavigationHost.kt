@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.samwrotethecode.translator.history_screen.presentation.HistoryScreen
 import com.samwrotethecode.translator.home_screen.presentation.HomeScreen
 
 @Composable
@@ -16,7 +17,18 @@ fun NavigationHost() {
         startDestination = AppScreens.HomeScreen.route,
     ) {
         composable(AppScreens.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen(
+                onHistoryClick = {
+                    navController.navigate(AppScreens.HistoryScreen.route)
+                }
+            )
+        }
+        composable(AppScreens.HistoryScreen.route) {
+            HistoryScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

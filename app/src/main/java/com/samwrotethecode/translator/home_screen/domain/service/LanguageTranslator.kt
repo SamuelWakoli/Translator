@@ -7,7 +7,7 @@ interface LanguageTranslator {
         targetLanguage: String,
         onDownloadModel: () -> Unit,
         onCompleteModelDownload: () -> Unit,
-        onSuccess: (String?) -> Unit,
+        onSuccess: (String) -> Unit,
         onError: (String) -> Unit,
-    )
+    ): Unit
 }

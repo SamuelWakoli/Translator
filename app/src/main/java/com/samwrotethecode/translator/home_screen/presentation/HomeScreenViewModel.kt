@@ -65,22 +65,6 @@ class HomeScreenViewModel @Inject constructor(
     }
 
     fun selectTargetLanguage(languageCode: String) {
-        _uiState.value = _uiState.value.copy(
-            targetLanguage = languageCode,
-            translatedText = null,
-        )
-    }
-
-    fun updateInputText(text: String) {
-        _uiState.value = _uiState.value.copy(
-            inputText = text,
-        )
-    }
-
-    fun translateText() {
-        val text = _uiState.value.inputText
-        if (text.isBlank()) {
-            _uiState.value = _uiState.value.copy(
                 error = "Please enter text to translate"
             )
             return

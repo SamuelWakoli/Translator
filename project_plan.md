@@ -11,23 +11,23 @@ Build a premium, modern, and adaptive Android translator app that justifies a $1
 
 ## Sprints
 
-### Sprint 1: Foundation & Core Experience (Current Focus)
-- [ ] **Adaptive Navigation Architecture**
+### Sprint 1: Foundation & Core Experience (Completed)
+- [x] **Adaptive Navigation Architecture**
     - Implement `NavigationSuiteScaffold` or custom logic for:
         - Bottom Navigation (Compact - Phones)
         - Navigation Rail (Medium - Foldables/Tablets in portrait)
         - Permanent Navigation Drawer (Expanded - Tablets landscape/Desktop)
     - Handle Window Size Classes.
-- [ ] **Enhanced Home Screen**
+- [x] **Enhanced Home Screen**
     - Clean text input area with auto-detect language.
     - Quick language swap.
     - "Paste" and "Copy" quick actions.
-- [ ] **Local History & Favorites**
+- [x] **Local History & Favorites**
     - [x] Room Database integration (Implemented).
     - [x] Basic History Screen (Implemented).
-    - [ ] **Add**: Search and Filter history items.
-    - [ ] **Add**: Ability to "Star" translations (Favorites/Phrasebook foundation).
-- [ ] **Dictionary Page (MVP)**
+    - [x] **Add**: Search and Filter history items.
+    - [x] **Add**: Ability to "Star" translations (Favorites/Phrasebook foundation).
+    - [x] **Dictionary Page (MVP)**
     - Dedicated screen for looking up words.
     - Definitions, synonyms, and usage examples.
     - "Word of the Day" card for engagement.

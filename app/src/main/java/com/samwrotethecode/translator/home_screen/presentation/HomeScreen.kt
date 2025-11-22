@@ -8,23 +8,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.ContentPaste
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -65,7 +53,8 @@ fun HomeScreenAppBar(
             Image(
                 painter = painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary)
+                colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
+                modifier = Modifier.size(32.dp)
             )
         },
         title = {
@@ -112,7 +101,7 @@ fun HomeScreenBody(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 InputLanguageSelector(modifier = Modifier.weight(1f))
-                IconButton(onClick = {
+                OutlinedButton(onClick = {
                     clipboardManager.getText()?.let {
                         viewModel.updateInputText(it.text)
                     }
@@ -122,6 +111,8 @@ fun HomeScreenBody(
                         contentDescription = "Paste",
                         tint = MaterialTheme.colorScheme.primary
                     )
+                    Spacer(Modifier.size(8.dp))
+                    Text("Paste")
                 }
             }
 
@@ -143,20 +134,6 @@ fun HomeScreenBody(
                 if (uiState.inputText.isNotBlank() && uiState.autoDetectLanguage) {
                     // Debounce for 1 second before detecting language
                     delay(1000L)
-                    if (uiState.inputText.isNotBlank()) { // Re-check after delay
-                        viewModel.detectLanguage()
-                    }
-                }
-            }
-            
-            Spacer(Modifier.size(8.0.dp))
-            OutputLanguageSelector(modifier = Modifier.padding(8.dp))
-            Spacer(Modifier.size(8.dp))
-            
-            uiState.translatedText?.let {
-                Row(
-                    modifier = Modifier
-                        .padding(8.dp)
                         .fillMaxWidth()
                 ) {
                     Card(

@@ -17,18 +17,10 @@ fun NavigationHost(
         startDestination = AppScreens.HomeScreen.route,
     ) {
         composable(AppScreens.HomeScreen.route) {
-            HomeScreen(
-                onHistoryClick = {
-                    navController.navigate(AppScreens.HistoryScreen.route)
-                }
-            )
+            HomeScreen()
         }
         composable(AppScreens.HistoryScreen.route) {
-            HistoryScreen(
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
+            HistoryScreen()
         }
         composable(AppScreens.DictionaryScreen.route) {
             DictionaryScreen()

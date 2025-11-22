@@ -50,10 +50,10 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun HomeScreen(
-    onHistoryClick: () -> Unit
+
 ) {
     Scaffold(
-        topBar = { HomeScreenAppBar(onHistoryClick = onHistoryClick) }) { innerPadding ->
+        topBar = { HomeScreenAppBar() }) { innerPadding ->
         HomeScreenBody(modifier = Modifier.padding(innerPadding))
     }
 }
@@ -61,7 +61,6 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenAppBar(
-    onHistoryClick: () -> Unit
 ) {
     TopAppBar(
         navigationIcon = {
@@ -74,15 +73,6 @@ fun HomeScreenAppBar(
         },
         title = {
             Text("Translator", fontWeight = FontWeight.Bold)
-        },
-        actions = {
-            IconButton(onClick = onHistoryClick) {
-                Icon(
-                    imageVector = Icons.Default.History,
-                    contentDescription = "History",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             titleContentColor = MaterialTheme.colorScheme.primary,

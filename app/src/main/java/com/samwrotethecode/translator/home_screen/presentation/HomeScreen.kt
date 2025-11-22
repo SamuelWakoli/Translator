@@ -1,6 +1,7 @@
 package com.samwrotethecode.translator.home_screen.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -68,7 +69,7 @@ fun HomeScreenAppBar(
                 painter = painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primary),
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(56.dp)
             )
         },
         title = {
@@ -103,11 +104,11 @@ fun HomeScreenBody(
                 .widthIn(max = 600.dp)
                 .padding(8.dp)
         ) {
-            MLKitAttribution(
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .padding(horizontal = 16.dp)
-            )
+//            MLKitAttribution(
+//                modifier = Modifier
+//                    .padding(bottom = 16.dp)
+//                    .padding(horizontal = 16.dp)
+//            )
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -115,18 +116,27 @@ fun HomeScreenBody(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 InputLanguageSelector(modifier = Modifier.weight(1f))
-                OutlinedButton(onClick = {
-                    clipboardManager.getText()?.let {
-                        viewModel.updateInputText(it.text)
+                Spacer(Modifier.size(8.dp))
+                Card(
+                    onClick = {
+                        clipboardManager.getText()?.let {
+                            viewModel.updateInputText(it.text)
+                        }
+                    },
+                ) {
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ContentPaste,
+                            contentDescription = "Paste",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(Modifier.size(8.dp))
+                        Text("Paste")
                     }
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.ContentPaste,
-                        contentDescription = "Paste",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(Modifier.size(8.dp))
-                    Text("Paste")
                 }
             }
 
@@ -237,6 +247,7 @@ fun HomeScreenBody(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    Spacer(Modifier.size(16.dp))
                     ElevatedButton(
                         onClick = {
                             viewModel.translateText()

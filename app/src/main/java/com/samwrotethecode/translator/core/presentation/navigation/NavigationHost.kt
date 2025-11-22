@@ -5,13 +5,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.samwrotethecode.translator.history_screen.presentation.HistoryScreen
 import com.samwrotethecode.translator.home_screen.presentation.HomeScreen
-
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.samwrotethecode.translator.dictionary_screen.presentation.DictionaryScreen
-import com.samwrotethecode.translator.settings_screen.presentation.SettingsScreen
 
 @Composable
 fun NavigationHost(
@@ -37,9 +32,6 @@ fun NavigationHost(
         }
         composable(AppScreens.DictionaryScreen.route) {
             DictionaryScreen()
-        }
-        composable(AppScreens.SettingsScreen.route) {
-            SettingsScreen()
         }
     }
 }

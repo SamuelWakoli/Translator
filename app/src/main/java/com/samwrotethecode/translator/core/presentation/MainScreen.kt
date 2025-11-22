@@ -1,10 +1,10 @@
 package com.samwrotethecode.translator.core.presentation
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -13,10 +13,12 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -39,17 +41,15 @@ fun MainScreen(
             icon = painterResource(R.drawable.ic_launcher_foreground),
             label = "Translator",
             isVector = false
-        ), NavigationItem(
+        ),
+        NavigationItem(
             route = AppScreens.DictionaryScreen.route,
             icon = Icons.Default.Book,
             label = "Dictionary"
-        ), NavigationItem(
+        ),
+        NavigationItem(
             route = AppScreens.HistoryScreen.route, icon = Icons.Default.History, label = "History"
-        ), NavigationItem(
-            route = AppScreens.SettingsScreen.route,
-            icon = Icons.Default.Settings,
-            label = "Settings"
-        )
+        ),
     )
 
     val layoutType = when (windowSizeClass) {
@@ -86,6 +86,7 @@ fun MainScreen(
                         } else {
                             Image(
                                 painter = item.icon as Painter,
+                                modifier = Modifier.size(36.dp),
                                 contentDescription = item.label,
                                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant)
                             )

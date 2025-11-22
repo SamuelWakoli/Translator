@@ -2,35 +2,39 @@
 
 # Translator
 
-**Translator** is an Android application demonstrating on-device machine learning capabilities for
-language translation. It leverages Google's ML Kit to provide seamless and efficient language
-detection and translation.
+**Translator** is a modern, adaptive Android application designed for seamless language translation. It leverages Google's ML Kit for on-device machine learning, ensuring privacy and offline capability.
 
 ## Features
 
-* **Language Detection:** Automatically identifies the language of the input text.
-* **Text Translation:** Translates text into a wide variety of target languages.
-* **On-Device ML:** Utilizes ML Kit's on-device models for fast and offline-capable translation.
+*   **Smart Translation:** Instantly translate text between multiple languages with automatic language detection.
+*   **On-Device Privacy:** All translations happen on your device using ML Kit, keeping your data private and working offline.
+*   **History & Favorites:** Automatically save your translation history and "Star" important phrases for quick future access.
+*   **Dictionary:** Integrated dictionary with definitions, synonyms, and usage examples.
+*   **Word of the Day:** Learn something new every day with a featured word card.
+*   **Adaptive UI:** A responsive design that works beautifully on phones, foldables, and tablets.
 
 ## Tech Stack
 
-* **Kotlin:** Primary programming language.
-* **Jetpack Compose:** Modern UI toolkit for building native Android UIs.
-* **ML Kit:**
-    * Language ID
-    * Translation
-* **Hilt:** For dependency injection.
-* **Coroutines & Flow:** For asynchronous operations.
+*   **Kotlin:** Primary programming language.
+*   **Jetpack Compose:** Modern UI toolkit for building native Android UIs.
+*   **Material 3:** Latest Material Design components and theming.
+*   **ML Kit:**
+    *   Language ID
+    *   Translation
+*   **Hilt:** Dependency injection.
+*   **Room Database:** Local storage for history and favorites.
+*   **Coroutines & Flow:** Asynchronous operations.
 
 ## Screenshots
 
-<img src="screenshots/thai-english.png"
-width="300" height="600" alt="Illustration for Thai to English translation">
-<img src="screenshots/thai-chinese.png"
-width="300" height="600" alt="Illustration for Thai to Chinese translation">
-<img src="screenshots/english-swahili.png"
-width="300" height="600" alt="Illustration for English to Swahili translation">
-<img src="screenshots/japanese-english.png"
-width="300" height="600" alt="Illustration for Japanese to English translation">
-<img src="screenshots/language_selector.png"
-width="300" height="600" alt="Illustration showing language selector">
+|                                         Translation                                          |                                Language Selection                                 |
+|:--------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|
+| <img src="screenshots/english-swahili.png" width="300" alt="English to Swahili translation"> | <img src="screenshots/language_selector.png" width="300" alt="Language Selector"> |
+
+|                                    Dictionary                                     |                                Word of the Day                                |
+|:---------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------:|
+| <img src="screenshots/dictionary-search.png" width="300" alt="Dictionary Search"> | <img src="screenshots/word-of-the-day.png" width="300" alt="Word of the Day"> |
+
+|                                     History                                     |                                      Japanese to English                                       |
+|:-------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------:|
+| <img src="screenshots/translator-history.png" width="300" alt="History Screen"> | <img src="screenshots/japanese-english.png" width="300" alt="Japanese to English translation"> |

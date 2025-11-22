@@ -8,6 +8,20 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.ContentPaste
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.SwapVert
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -94,7 +108,7 @@ fun HomeScreenBody(
                     .padding(bottom = 16.dp)
                     .padding(horizontal = 16.dp)
             )
-            
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -129,11 +143,37 @@ fun HomeScreenBody(
                 textStyle = MaterialTheme.typography.bodyLarge,
                 shape = MaterialTheme.shapes.large,
             )
-            
+
             LaunchedEffect(uiState.inputText) {
                 if (uiState.inputText.isNotBlank() && uiState.autoDetectLanguage) {
                     // Debounce for 1 second before detecting language
                     delay(1000L)
+                    if (uiState.inputText.isNotBlank()) { // Re-check after delay
+                        viewModel.detectLanguage()
+                    }
+                }
+            }
+
+            Spacer(Modifier.size(8.0.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                OutputLanguageSelector(modifier = Modifier.weight(1f))
+                IconButton(onClick = { viewModel.swapLanguages() }) {
+                    Icon(
+                        imageVector = Icons.Default.SwapVert,
+                        contentDescription = "Swap Languages",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+            Spacer(Modifier.size(8.dp))
+
+            uiState.translatedText?.let {
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
                         .fillMaxWidth()
                 ) {
                     Card(
@@ -172,7 +212,7 @@ fun HomeScreenBody(
                     }
                 }
             }
-            
+
             Column(modifier = Modifier.padding(8.dp)) {
                 if (uiState.isDetectingLanguage) {
                     Text("Detecting language...")

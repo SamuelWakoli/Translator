@@ -6,6 +6,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Translate
+import androidx.compose.material.icons.outlined.Book
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -39,18 +43,22 @@ fun MainScreen(
     val navItems = listOf(
         NavigationItem(
             route = AppScreens.HomeScreen.route,
-            icon = painterResource(R.drawable.ic_launcher_foreground),
+//            icon = painterResource(R.drawable.ic_launcher_foreground),
+            icon = Icons.Default.Translate,
+            unSelectedIcon = Icons.Outlined.Translate,
             label = "Translator",
-            isVector = false
+//            isVector = false
         ),
         NavigationItem(
             route = AppScreens.DictionaryScreen.route,
             icon = Icons.Default.Book,
+            unSelectedIcon = Icons.Outlined.Book,
             label = "Dictionary"
         ),
         NavigationItem(
             route = AppScreens.HistoryScreen.route,
             icon = Icons.Default.History,
+            unSelectedIcon = Icons.Outlined.History,
             label = "History",
         ),
     )
@@ -71,9 +79,15 @@ fun MainScreen(
 
     NavigationSuiteScaffold(
         layoutType = layoutType, navigationSuiteItems = {
+
             navItems.forEach { item ->
+
+                val isSelected =
+                    currentDestination?.hierarchy?.any { it.route == item.route } == true
+                val selectedIcon: Any = if (isSelected) item.icon else item.unSelectedIcon
+
                 item(
-                    selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                    selected = isSelected,
                     onClick = {
                         navController.navigate(item.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
@@ -85,12 +99,13 @@ fun MainScreen(
                     },
                     icon = {
                         if (item.isVector) {
-                            Icon(item.icon as ImageVector, contentDescription = item.label)
+                            Icon(selectedIcon as ImageVector, contentDescription = item.label)
                         } else {
                             Image(
-                                painter = item.icon as Painter,
+                                painter = selectedIcon as Painter,
                                 modifier = Modifier.size(36.dp),
                                 contentDescription = item.label,
+                                contentScale = ContentScale.FillBounds,
                                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurfaceVariant)
                             )
                         }
@@ -105,5 +120,9 @@ fun MainScreen(
 }
 
 data class NavigationItem(
-    val route: String, val icon: Any, val label: String, val isVector: Boolean = true
+    val route: String,
+    val icon: Any,
+    val unSelectedIcon: Any,
+    val label: String,
+    val isVector: Boolean = true
 )

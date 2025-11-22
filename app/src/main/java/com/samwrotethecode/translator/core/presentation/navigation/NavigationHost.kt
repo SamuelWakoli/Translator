@@ -1,5 +1,9 @@
 package com.samwrotethecode.translator.core.presentation.navigation
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,6 +19,10 @@ fun NavigationHost(
     NavHost(
         navController = navController,
         startDestination = AppScreens.HomeScreen.route,
+        enterTransition = { fadeIn(animationSpec = tween(durationMillis = 300)) },
+        exitTransition = { fadeOut(animationSpec = tween(durationMillis = 300)) },
+        popEnterTransition = { fadeIn(animationSpec = tween(durationMillis = 300)) },
+        popExitTransition = { fadeOut(animationSpec = tween(durationMillis = 300)) }
     ) {
         composable(AppScreens.HomeScreen.route) {
             HomeScreen()

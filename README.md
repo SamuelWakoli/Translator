@@ -4,6 +4,10 @@
 
 **Translator** is a modern, adaptive Android application designed for seamless language translation. It leverages Google's ML Kit for on-device machine learning, ensuring privacy and offline capability.
 
+<a href='https://play.google.com/store/apps/dev?id=5163633591987733044'>
+  <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="80"/>
+</a>
+
 ## Features
 
 *   **Smart Translation:** Instantly translate text between multiple languages with automatic language detection.

@@ -102,7 +102,7 @@ fun HomeScreenBody(
         Column(
             modifier = Modifier
                 .widthIn(max = 600.dp)
-                .padding(8.dp)
+                .padding(16.dp)
         ) {
 //            MLKitAttribution(
 //                modifier = Modifier
@@ -165,19 +165,35 @@ fun HomeScreenBody(
             }
 
             Spacer(Modifier.size(8.0.dp))
+
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 OutputLanguageSelector(modifier = Modifier.weight(1f))
-                IconButton(onClick = { viewModel.swapLanguages() }) {
-                    Icon(
-                        imageVector = Icons.Default.SwapVert,
-                        contentDescription = "Swap Languages",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
+
+                Spacer(Modifier.size(8.dp))
+
+                Card(
+                    onClick = { viewModel.swapLanguages() },
+                ) {
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.SwapVert,
+                            contentDescription = "Swap Languages",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Spacer(Modifier.size(8.dp))
+                        Text("Swap")
+                    }
                 }
             }
+
             Spacer(Modifier.size(8.dp))
 
             uiState.translatedText?.let {

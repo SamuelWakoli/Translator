@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -48,7 +49,9 @@ fun MainScreen(
             label = "Dictionary"
         ),
         NavigationItem(
-            route = AppScreens.HistoryScreen.route, icon = Icons.Default.History, label = "History"
+            route = AppScreens.HistoryScreen.route,
+            icon = Icons.Default.History,
+            label = "History",
         ),
     )
 
